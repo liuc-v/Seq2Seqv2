@@ -53,7 +53,7 @@ def run():
         torch.cuda.empty_cache()
         valid_loss = evaluate(model, valid_dataloader, criterion)
         torch.cuda.empty_cache()
-        print("EPOCH:{}, TRAIN_LOSS{}, VALID_LOSS{}".format(i, train_loss, 1))
+        print("EPOCH:{}, TRAIN_LOSS:{}, VALID_LOSS:{}".format(i, train_loss, valid_loss))
         torch.save(model, "LSTM{}.model".format(i))
 
         best_valid_loss = float('inf')
