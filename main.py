@@ -48,6 +48,9 @@ def run():
     train_dataloader, valid_dataloader, test_dataloader = get_dataloader()
     print("--------------FINISH LOAD DATA------------------")
 
+    best_valid_loss = float('inf')
+    early_stop = config.early_stop
+
     for i in range(1, config.epoch_num + 1):
         train_loss = train(model, train_dataloader, opt, criterion)
         torch.cuda.empty_cache()
@@ -55,16 +58,15 @@ def run():
         torch.cuda.empty_cache()
         print("EPOCH:{}, TRAIN_LOSS:{}, VALID_LOSS:{}".format(i, train_loss, valid_loss))
         torch.save(model, "LSTM{}.model".format(i))
-
-        best_valid_loss = float('inf')
-        early_stop = config.early_stop
         if valid_loss > best_valid_loss:
             early_stop = early_stop - 1
             if early_stop <= 0:
                 print("-------------EARLY STOP!-----------------")
                 break
         else:
+            best_valid_loss = valid_loss
             early_stop = config.early_stop
+            torch.save(model, "BEST4层LSTM.model")
 
 
 if __name__ == '__main__':
